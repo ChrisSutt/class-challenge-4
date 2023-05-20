@@ -1,6 +1,33 @@
 .content {
-font-size: 500px;
+font-size: 50px;
 display: flex;
 justify-content: center;
-text-align: center;
+margin: auto;
+margin-top: 100px;
+padding: 5px;
+max-width: 700px;
+display:block;
+border-radius: 15px;
+background-color: rgba(143, 143, 143, 0.267);
+}
+
+.buttons {
+    align-content: flex-start;
+}
+
+.question {
+    text-align: center;
+}
+
+.scoretime {
+    display:inline-flex;
+    width: 100%;
+}
+
+.timer {
+margin-left:auto;
+}
+
+.content span { 
+    align-self: center;
 }
