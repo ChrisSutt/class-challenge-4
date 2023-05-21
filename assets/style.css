@@ -12,6 +12,7 @@ background-color: rgba(143, 143, 143, 0.267);
 }
 
 .buttons {
+    margin: 2px;
     align-content: flex-start;
 }
 
@@ -28,6 +29,10 @@ background-color: rgba(143, 143, 143, 0.267);
 margin-left:auto;
 }
 
-.content span { 
-    align-self: center;
+.start {
+    display: flex;
+    margin-top: 10px;
+    padding: 1px;
+    justify-content:center;
+    
 }
