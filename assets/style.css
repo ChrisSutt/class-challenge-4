@@ -88,3 +88,20 @@ body{
         word-spacing: 2px;
     } 
 }
+
+.scoretime {
+    display:inline-flex;
+    width: 100%;
+}
+
+.timer {
+margin-left:auto;
+}
+
+.start {
+    display: flex;
+    margin-top: 10px;
+    padding: 1px;
+    justify-content:center;
+    
+}
