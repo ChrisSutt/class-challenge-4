@@ -1,4 +1,4 @@
-var Questions = [{
+var questions = [{
     id: 0,
     q: 'Who invented Java Programming?',
     a: [{ text: 'Guido van Rossum', isTrue: false },
@@ -36,3 +36,27 @@ var Questions = [{
 
 }
 ]
+var start = document.querySelector('.start');
+var timeLeft = 100;
+var timeEl = document.querySelector('.timer');
+var startEl = document.getElementById('start');
+
+start.addEventListener('click', function () {
+    var timerInterval = setInterval(function() {
+        timeLeft--;
+        timeEl.textContent = timeLeft + " seconds left";
+        
+        
+        if(timeLeft === 0) {
+            return;
+        }
+
+        }, 1000);
+        
+});
+
+startEl.addEventListener('click', function () {
+    startEl.remove();
+});
+
+
