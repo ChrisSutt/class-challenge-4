@@ -105,3 +105,11 @@ margin-left:auto;
     justify-content:center;
     
 }
+
+.question {
+    display: none;
+}
+
+.question.current {
+    display: block;
+}
