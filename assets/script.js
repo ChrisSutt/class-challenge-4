@@ -33,6 +33,7 @@ const quizData = [
     },
   ];
 
+var scoreList = document.getElementById("scores");
 var quiz = document.getElementById("quiz");
 var answerElements = document.querySelectorAll(".answer");
 var questionElement = document.getElementById("question");
@@ -45,7 +46,12 @@ var timeLeft = 60;
 var timeEl = document.querySelector('#timer');
 var welcomePage = document.getElementById("welcome");
 var gamePage = document.getElementById("game");
+var endGame = document.getElementById("endGame")
 var timerInterval;
+var finalScore = document.getElementById('finalScore');
+var initials = document.getElementById('initials').value;
+var fScore;
+
 
 var currentQuiz = 0;
 var score = 0;
@@ -70,9 +76,36 @@ function viewGame()
         gamePage.style.display = "none";
     }
 }
+function viewEndGame()
+{
+    if(endGame.style.display === "none") {
+        endGame.style.display = "block";
+    }
+    else {
+        endGame.style.display = "none";
+    }
+}
+
+function viewScores() {
+    if(scoreList.style.display === "none") {
+        scoreList.style.display = "block";
+    }
+    else {
+        scoreList.style.display = "none";
+    }
+}  
 
 
 viewGame();
+viewEndGame();
+viewScores();
+
+
+
+function listScore() {
+    viewScores();
+    viewWelcome();
+}
 
 
 var deselectAnswers = () => {
@@ -114,16 +147,14 @@ var deselectAnswers = () => {
       currentQuiz++;
       if (currentQuiz < quizData.length) loadQuiz();
       else {
-        quiz.innerHTML = `
-              <button onclick="history.go(0)">Play Again</button>
-        ` 
+        score = timeLeft;
+        finalScore.textContent = "Your score is: " + score;
+        viewGame();
+        viewEndGame();
+        clearInterval(timerInterval);
       }
     }
   });
-
-
-
-function highScore()
 
 
 
@@ -134,6 +165,42 @@ function gameTimer()
     
     if(timeLeft <= 0) {
         clearInterval(timerInterval);
-        gameOver();
+        endGame();
     }
+}
+
+function endGame() {
+    finalScore.textContent = "";
+    viewGame();
+    viewEndGame();
+    
+}
+
+function submitScore() {
+    saveScore();
+    viewEndGame();
+    viewScores();
+}
+
+
+function saveScore() {
+    var savedScore = {
+        initials: initials.value,
+        fScore: fScore
+    };
+    localStorage.setItem("savedScore", JSON.stringify(savedScore));
+}
+loadScore();
+function loadScore() {
+    var loadedScore = JSON.parse(localStorage.getItem("savedScore"));
+
+    if(loadScore !== null) {
+        document.getElementById("loadInitials").innerHTML=loadedScore.initials;
+        document.getElementById("loadFScore").innerHTML=loadedScore.fScore;
+    }
+    else return;
+}
+
+function clearScore() {
+    localStorage.clear();
 }

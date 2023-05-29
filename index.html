@@ -14,7 +14,7 @@
 </head>
 
 <header>
-    <a id="highscore" href="#">View Highscore</a>
+    <a id="highscore" onclick="listScore()">View Highscore</a>
     <h5 id="timer">timer</h5>
 </header>
 
@@ -49,7 +49,28 @@
             </li>
           </ul> 
           <button id="submit">Submit</button>
+    </div>
+
+     <div id="endGame">
+        <h1> this is the start of my quiz</h1>
+        <p id="finalScore">Your final score is:</p>
+        <label for="initials">fuckkkk</label>
+        <input type="text" id="initials" name="initials" style="margin-top: 5px;">
+        <button style="margin-top: 10px;" onclick="submitScore()">Submit</button>
      </div>
+
+     <div id="scores">
+        <h1>Highscores</h1>
+        <div class="column">
+            <ol>
+                <li>
+                    <label id="loadInitials"></label>
+                    <label id="loadFScore"></label>
+                </li>
+            </ol>
+        </div>
+        <button id="clearscores" onclick="clearScore()">Clear High Scores</button>"
+    </div>
 
 </div>
 
