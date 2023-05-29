@@ -23,8 +23,11 @@
 <div class="quizstart" id="quiz">
 
     <div id="welcome">
-        <h1> the name of the quiz</h1>
-        <p>this is also the name of the quiz</p>
+        <h1> JavaScript Quiz</h1>
+        <p>A quick 4 question quiz. please select your answer and click submit.
+           your score is based on your time remaining. click start when you're ready to
+           begin.
+        </p>
         <button onclick="startGame()">Start Quiz</button>
     </div>
 
@@ -52,9 +55,9 @@
     </div>
 
      <div id="endGame">
-        <h1> this is the start of my quiz</h1>
+        <h1> Quiz End, Your Score is</h1>
         <p id="finalScore">Your final score is:</p>
-        <label for="initials">fuckkkk</label>
+        <label for="initials">Initials</label>
         <input type="text" id="initials" name="initials" style="margin-top: 5px;">
         <button style="margin-top: 10px;" onclick="submitScore()">Submit</button>
      </div>
@@ -64,19 +67,16 @@
         <div class="column">
             <ol>
                 <li>
-                    <label id="loadInitials"></label>
-                    <label id="loadFScore"></label>
+                    <label id="loadInitials"></label><br>
+                    <label id="lScore"></label><label id="loadFScore"></label><br>
+                    <label id="lTime"></label><label id="loadTime"></label>
                 </li>
             </ol>
         </div>
-        <button id="clearscores" onclick="clearScore()">Clear High Scores</button>"
+        <button id="clearscores" onclick="clearScore()">Clear High Scores</button>
     </div>
 
 </div>
-
-
-
-
 
        <script src="./assets/script.js"></script>
     </body>

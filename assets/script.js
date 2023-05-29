@@ -33,8 +33,16 @@ const quizData = [
     },
   ];
 
+
+
+//Element Variables
+var welcomePage = document.getElementById("welcome");
+var gamePage = document.getElementById("game");
+var endGame = document.getElementById("endGame");
 var scoreList = document.getElementById("scores");
-var quiz = document.getElementById("quiz");
+
+//Reactive Element Variables
+var timeEl = document.querySelector('#timer');
 var answerElements = document.querySelectorAll(".answer");
 var questionElement = document.getElementById("question");
 var atext = document.getElementById("atext");
@@ -42,21 +50,152 @@ var btext = document.getElementById("btext");
 var ctext = document.getElementById("ctext");
 var dtext = document.getElementById("dtext");
 var submitButton = document.getElementById("submit");
+var finalScore = document.getElementById("finalScore");
+
+//Game Variables
 var timeLeft = 60;
-var timeEl = document.querySelector('#timer');
-var welcomePage = document.getElementById("welcome");
-var gamePage = document.getElementById("game");
-var endGame = document.getElementById("endGame")
-var timerInterval;
-var finalScore = document.getElementById('finalScore');
-var initials = document.getElementById('initials').value;
-var fScore;
-
-
 var currentQuiz = 0;
-var score = 0;
+var score = 0; // Scores correct answers.
+var timerInterval;
+var finalTime; // Added for time scoring.
 
+//LocalStorage Variables
+var initials; //Repositioned input value to time of saving.
+var fScore;
+var fTime; //New
 
+var deselectAnswers = () => {
+  answerElements.forEach((answer) => (answer.checked = false));
+};
+
+var getSelected = () => {
+  var answer;
+  answerElements.forEach((answerElement) => {
+    if (answerElement.checked) answer = answerElement.id;
+  });
+  return answer;
+};
+
+var loadQuiz = () => {
+  deselectAnswers();
+  var currentQuizData = quizData[currentQuiz];
+  questionElement.innerText = currentQuizData.question;
+  atext.innerText = currentQuizData.a;
+  btext.innerText = currentQuizData.b;
+  ctext.innerText = currentQuizData.c;
+  dtext.innerText = currentQuizData.d;
+};
+
+submitButton.addEventListener("click", () => {
+  var answer = getSelected();
+  if (answer) {
+    if (answer === quizData[currentQuiz].correct) 
+    {
+      score++;
+      currentQuiz++;
+      refreshQuestion()
+    }
+    else if (answer !== quizData[currentQuiz].correct)
+    {
+      timeLeft -= 10;
+      currentQuiz++;
+      refreshQuestion();
+    } 
+  }
+});
+
+function refreshQuestion()
+{
+  if (currentQuiz < quizData.length) loadQuiz();
+  else {
+    finalTime = timeLeft;
+    finalScore.textContent = "Your score is: " + score;
+    viewGame();
+    viewEndGame();
+    clearInterval(timerInterval);
+  }
+}
+
+function startGame()
+{
+  viewWelcome();
+  viewGame();
+  loadQuiz();
+  timerInterval = setInterval(gameTimer, 1000);
+}
+
+function gameTimer()
+{
+    timeLeft--;
+    timeEl.textContent = "Time: " + timeLeft;
+    
+    if(timeLeft <= 0) {
+        clearInterval(timerInterval);
+        endGame();
+    }
+}
+
+function endGame() 
+{
+    finalScore.textContent = "";
+    viewGame();
+    viewEndGame();
+}
+
+function submitScore()
+{
+    saveScore();
+    loadScore(); //Loads recently saved data.
+    viewEndGame();
+    viewScores();
+}
+
+function listScore() {
+  loadScore();
+  viewScores();
+  viewWelcome();
+}
+
+// Data Management Functions
+function saveScore() 
+{
+    var savedScore = {
+        initials: document.getElementById("initials").value, //pull input information after input is made
+        fScore: score, //Changed fScore: fScore to fScore: score
+        fTime: finalTime //New
+    };
+    localStorage.setItem("savedScore", JSON.stringify(savedScore));
+}
+
+function loadScore() 
+{
+    var loadedScore = JSON.parse(localStorage.getItem("savedScore"));
+
+    if(loadedScore !== null) { //Changed loadScore to loadedScore.
+        document.getElementById("loadInitials").innerHTML = loadedScore.initials;
+        document.getElementById("loadFScore").innerHTML = loadedScore.fScore;
+        document.getElementById("loadTime").innerHTML = loadedScore.fTime; //New
+
+        //Format score card
+        document.getElementById("lScore").innerHTML = "Score:&nbsp"; // &nbsp adds a blank space.
+        document.getElementById("lTime").innerHTML = "Time:&nbsp";
+    }
+    else return;
+}
+
+function clearScore() 
+{
+    localStorage.clear();
+    // Update HTML text after clearing data
+    document.getElementById("loadInitials").innerHTML = "";
+    document.getElementById("loadFScore").innerHTML = "";
+    document.getElementById("loadTime").innerHTML = "";
+
+    document.getElementById("lScore").innerHTML = "";
+    document.getElementById("lTime").innerHTML = "";
+}
+
+// Visibility Functions
 function viewWelcome()
 {
     if(welcomePage.style.display === "none") {
@@ -76,6 +215,7 @@ function viewGame()
         gamePage.style.display = "none";
     }
 }
+
 function viewEndGame()
 {
     if(endGame.style.display === "none") {
@@ -93,114 +233,10 @@ function viewScores() {
     else {
         scoreList.style.display = "none";
     }
-}  
+}
 
-
+// Moved all internally called functions here
 viewGame();
 viewEndGame();
 viewScores();
-
-
-
-function listScore() {
-    viewScores();
-    viewWelcome();
-}
-
-
-var deselectAnswers = () => {
-    answerElements.forEach((answer) => (answer.checked = false));
-  };
-
-  var getSelected = () => {
-    var answer;
-    answerElements.forEach((answerElement) => {
-      if (answerElement.checked) answer = answerElement.id;
-    });
-    return answer;
-  };
-
-
-  function startGame() {
-    viewWelcome();
-    viewGame();
-    loadQuiz();
-    timerInterval = setInterval(gameTimer, 1000);
-  }
-
-  var loadQuiz = () => {
-    deselectAnswers();
-    var currentQuizData = quizData[currentQuiz];
-    questionElement.innerText = currentQuizData.question;
-    atext.innerText = currentQuizData.a;
-    btext.innerText = currentQuizData.b;
-    ctext.innerText = currentQuizData.c;
-    dtext.innerText = currentQuizData.d;
-  };
-  
- 
-
-  submitButton.addEventListener("click", () => {
-    var answer = getSelected();
-    if (answer) {
-      if (answer === quizData[currentQuiz].correct) score++;
-      currentQuiz++;
-      if (currentQuiz < quizData.length) loadQuiz();
-      else {
-        score = timeLeft;
-        finalScore.textContent = "Your score is: " + score;
-        viewGame();
-        viewEndGame();
-        clearInterval(timerInterval);
-      }
-    }
-  });
-
-
-
-function gameTimer()
-{
-    timeLeft--;
-    timeEl.textContent = "Time: " + timeLeft;
-    
-    if(timeLeft <= 0) {
-        clearInterval(timerInterval);
-        endGame();
-    }
-}
-
-function endGame() {
-    finalScore.textContent = "";
-    viewGame();
-    viewEndGame();
-    
-}
-
-function submitScore() {
-    saveScore();
-    viewEndGame();
-    viewScores();
-}
-
-
-function saveScore() {
-    var savedScore = {
-        initials: initials.value,
-        fScore: fScore
-    };
-    localStorage.setItem("savedScore", JSON.stringify(savedScore));
-}
 loadScore();
-function loadScore() {
-    var loadedScore = JSON.parse(localStorage.getItem("savedScore"));
-
-    if(loadScore !== null) {
-        document.getElementById("loadInitials").innerHTML=loadedScore.initials;
-        document.getElementById("loadFScore").innerHTML=loadedScore.fScore;
-    }
-    else return;
-}
-
-function clearScore() {
-    localStorage.clear();
-}
